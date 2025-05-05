@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatUnity Server - Hosting Professionale</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #4338ca;
+            --secondary: #10b981;
+            --dark: #1e293b;
+            --darker: #0f172a;
+            --light: #f8fafc;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        body {
+            background-color: var(--darker);
+            color: var(--light);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background-color: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            z-index: 100;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .logo img {
+            height: 40px;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+        
+        nav a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        nav a:hover {
+            color: var(--primary);
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--primary);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 180px 0 100px;
+            background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, #fff, #a5b4fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 40px;
+            opacity: 0.9;
+        }
+        
+        /* About Section */
+        .about {
+            padding: 100px 0;
+            background-color: var(--dark);
+        }
+        
+        .about-content {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+        }
+        
+        .about-text {
+            flex: 1;
+        }
+        
+        .about-image {
+            flex: 1;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .about-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .section-title p {
+            font-size: 1.1rem;
+            opacity: 0.8;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* Pricing Section */
+        .pricing {
+            padding: 100px 0;
+            background-color: var(--darker);
+        }
+        
+        .plans {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .plan {
+            background-color: var(--dark);
+            border-radius: 10px;
+            padding: 40px 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .plan:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .plan.popular {
+            border: 1px solid var(--primary);
+            position: relative;
+        }
+        
+        .popular-badge {
+            position: absolute;
+            top: -12px;
+            right: 20px;
+            background-color: var(--primary);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .plan-name {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .plan-price {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        
+        .plan-price span {
+            font-size: 1rem;
+            opacity: 0.7;
+            font-weight: 400;
+        }
+        
+        .plan-features {
+            margin-bottom: 30px;
+        }
+        
+        .plan-features li {
+            list-style: none;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .plan-features li:before {
+            content: "✓";
+            color: var(--secondary);
+            font-weight: bold;
+        }
+        
+        /* Features Section */
+        .features {
+            padding: 100px 0;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+        
+        .feature {
+            background-color: var(--dark);
+            padding: 30px;
+            border-radius: 10px;
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+        
+        .feature h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            padding: 60px 0 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-column h3 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+        
+        .footer-column ul {
+            list-style: none;
+        }
+        
+        .footer-column li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-column a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-column a:hover {
+            color: white;
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            nav ul {
+                gap: 15px;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .about-content {
+                flex-direction: column;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="container header-container">
+            <a href="/" class="logo">
+                <img src="https://i.ibb.co/GvJjnQtf/3966376-E-DED6-4470-A3-C4-FE77-CEAD4-D21.jpg" alt="ChatUnity Logo">
+                ChatUnity Server
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#pricing">Piani</a></li>
+                    <li><a href="#features">Funzionalità</a></li>
+                    <li><a href="#about">Chi Siamo</a></li>
+                    <li><a href="#contact">Contatti</a></li>
+                </ul>
+            </nav>
+            <a href="#pricing" class="btn">Inizia Ora</a>
+        </div>
+    </header>
+
+    <section class="hero" id="home">
+        <div class="container">
+            <h1>Hosting Server Professionale</h1>
+            <p>ChatUnity offre soluzioni di hosting scalabili e ad alte prestazioni per le tue esigenze. Scegli tra i nostri piani flessibili e inizia subito.</p>
+            <a href="#pricing" class="btn">Vedi i Piani</a>
+        </div>
+    </section>
+
+    <section class="about" id="about">
+        <div class="container">
+            <div class="section-title">
+                <h2>Chi Siamo</h2>
+                <p>Scopri la storia e la missione di ChatUnity Server</p>
+            </div>
+            
+            <div class="about-content">
+                <div class="about-text">
+                    <h3>La Nostra Storia</h3>
+                    <p>Fondata nel 2023, ChatUnity Server nasce dalla passione per la tecnologia e dalla volontà di offrire soluzioni di hosting di qualità a prezzi accessibili. Ci siamo resi conto che molti servizi di hosting erano o troppo costosi o troppo limitati, e abbiamo deciso di creare una via di mezzo perfetta.</p>
+                    
+                    <h3>La Nostra Missione</h3>
+                    <p>Il nostro obiettivo è fornire hosting server affidabili, veloci e sicuri a privati e aziende, con un supporto clienti eccezionale e una piattaforma intuitiva che permetta a chiunque di gestire il proprio server senza difficoltà.</p>
+                    
+                    <h3>Il Nostro Team</h3>
+                    <p>Siamo un gruppo di esperti in infrastrutture cloud, sicurezza informatica e sviluppo software, uniti dalla passione per l'innovazione tecnologica e dal desiderio di offrire il miglior servizio possibile ai nostri clienti.</p>
+                </div>
+                <div class="about-image">
+                    <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Il nostro team al lavoro">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="pricing" id="pricing">
+        <div class="container">
+            <div class="section-title">
+                <h2>Piani di Abbonamento</h2>
+                <p>Scegli il piano che meglio si adatta alle tue esigenze. Tutti i piani includono supporto 24/7 e garanzia uptime del 99.9%.</p>
+            </div>
+            
+            <div class="plans">
+                <div class="plan">
+                    <h3 class="plan-name">BRONZO</h3>
+                    <div class="plan-price">€2.50<span>/mese</span></div>
+                    <ul class="plan-features">
+                        <li>1 CPU Core</li>
+                        <li>2GB RAM</li>
+                        <li>50GB SSD Storage</li>
+                        <li>1TB Bandwidth</li>
+                        <li>Supporto Prioritario</li>
+                        <li>Backup Giornaliero</li>
+                    </ul>
+                    <a href="#" class="btn" style="width: 100%; text-align: center;">Acquista</a>
+                </div>
+                
+                <div class="plan popular">
+                    <div class="popular-badge">POPOLARE</div>
+                    <h3 class="plan-name">ORO</h3>
+                    <div class="plan-price">€4.99<span>/mese</span></div>
+                    <ul class="plan-features">
+                        <li>2 CPU Core</li>
+                        <li>4GB RAM</li>
+                        <li>100GB SSD Storage</li>
+                        <li>2TB Bandwidth</li>
+                        <li>Supporto Prioritario</li>
+                        <li>Backup Giornaliero</li>
+                        <li>DDoS Protection</li>
+                    </ul>
+                    <a href="#" class="btn" style="width: 100%; text-align: center; background-color: var(--secondary);">Acquista</a>
+                </div>
+                
+                <div class="plan">
+                    <h3 class="plan-name">DIAMANTE</h3>
+                    <div class="plan-price">€7.50<span>/mese</span></div>
+                    <ul class="plan-features">
+                        <li>4 CPU Core</li>
+                        <li>8GB RAM</li>
+                        <li>200GB SSD Storage</li>
+                        <li>5TB Bandwidth</li>
+                        <li>Supporto Prioritario</li>
+                        <li>Backup Giornaliero</li>
+                        <li>DDoS Protection</li>
+                        <li>CDN Incluso</li>
+                    </ul>
+                    <a href="#" class="btn" style="width: 100%; text-align: center;">Acquista</a>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 50px;">
+                <p>Hai bisogno di un piano personalizzato? <a href="#contact" style="color: var(--primary);">Contattaci</a> per una soluzione su misura.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-title">
+                <h2>Le Nostre Funzionalità</h2>
+                <p>Scopri cosa rende ChatUnity la scelta migliore per il tuo hosting server.</p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Alte Prestazioni</h3>
+                    <p>Server ottimizzati con hardware di ultima generazione per garantire massime prestazioni e tempi di risposta minimi.</p>
+                </div>
+                
+                <div class="feature">
+                    <div class="feature-icon">🛡️</div>
+                    <h3>Sicurezza Avanzata</h3>
+                    <p>Protezione DDoS integrata, firewall avanzato e monitoraggio 24/7 per mantenere il tuo server al sicuro.</p>
+                </div>
+                
+                <div class="feature">
+                    <div class="feature-icon">📊</div>
+                    <h3>Monitoraggio in Tempo Reale</h3>
+                    <p>Dashboard intuitiva per monitorare le prestazioni del tuo server, il traffico e l'utilizzo delle risorse.</p>
+                </div>
+                
+                <div class="feature">
+                    <div class="feature-icon">🔄</div>
+                    <h3>Backup Automatici</h3>
+                    <p>Backup giornalieri automatici con storage off-site per garantire che i tuoi dati siano sempre al sicuro.</p>
+                </div>
+                
+                <div class="feature">
+                    <div class="feature-icon">🌐</div>
+                    <h3>Global CDN</h3>
+                    <p>Rete di distribuzione globale per garantire bassa latenza e alte prestazioni in tutto il mondo.</p>
+                </div>
+                
+                <div class="feature">
+                    <div class="feature-icon">🛠️</div>
+                    <h3>Supporto 24/7</h3>
+                    <p>Il nostro team di supporto è disponibile 24 ore su 24, 7 giorni su 7 per assisterti con qualsiasi problema.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>ChatUnity Server</h3>
+                    <p>Soluzioni di hosting professionali per ogni esigenza. Prestazioni, sicurezza e affidabilità.</p>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Link Veloci</h3>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#pricing">Piani</a></li>
+                        <li><a href="#features">Funzionalità</a></li>
+                        <li><a href="#about">Chi Siamo</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Supporto</h3>
+                    <ul>
+                        <li><a href="#">Documentazione</a></li>
+                        <li><a href="#">Status Server</a></li>
+                        <li><a href="#">Contattaci</a></li>
+                        <li><a href="#">FAQ</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Contatti</h3>
+                    <ul>
+                        <li>Email: chatunitycenter@gmail.com</li>
+                        <li>Telefono: +39 351 553 3859</li>
+                        <li>Indirizzo: Via Claudio Asello</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2023 ChatUnity Server. Tutti i diritti riservati.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // Sticky header
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            header.classList.toggle('sticky', window.scrollY > 0);
+        });
+        
+        // Toggle mobile menu
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const nav = document.querySelector('nav ul');
+        
+        if(mobileMenuBtn) {
+            mobileMenuBtn.addEventListener('click', function() {
+                nav.classList.toggle('active');
+            });
+        }
+    </script>
+</body>
+</html>
